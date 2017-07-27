@@ -56,7 +56,14 @@ newtype Counter eff = Counter
   { counter :: Int
   , onClick :: Eff eff Unit
   }
-cCls :: forall eff. ReactClass (Counter (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
+cCls
+  :: forall eff
+   . ReactClass
+      (Counter
+	( props :: ReactProps
+	, refs :: ReactRefs ReadOnly
+	, state :: ReactState ReadWrite
+	| eff))
 cCls = createClassStateless (\(Counter { counter, onClick: onClick' }) -> renderIn D.div' do
   div do
     span $ text (show counter)
