@@ -6,9 +6,10 @@ import Data.Array as A
 import Data.Exists (Exists, mkExists, runExists)
 import Data.Newtype (class Newtype, over, wrap)
 import Data.Tuple (Tuple(..))
-import Prelude (class Functor, Unit, id, pure, unit, ($), (<<<))
+import Prelude (class Functor, Unit, id, pure, unit, ($), (<<<), (<>))
 import React (ReactClass, ReactElement, createElement, createElementDynamic)
-import React.DOM (IsDynamic(..), mkDOM, text)
+import React.DOM (IsDynamic(..), mkDOM)
+import React.DOM (text) as R
 import React.DOM.Props (Props)
 
 class ReactProps n r | n -> r where
@@ -24,11 +25,13 @@ data Space a props
   = ReactClassNode (ReactClass props) props IsDynamic SpaceM a
   | DomNode String (Array Props) IsDynamic SpaceM a
   | TextNode String a
+  | ChildrenNode (Array ReactElement) a
   | Empty a
 
 mapSpace :: forall a b props. (a -> b) -> Space a props -> Space b props
-mapSpace f (ReactClassNode cls props dynamic children a) = ReactClassNode cls props dynamic children (f a)
-mapSpace f (DomNode tag props dynamic children a) = DomNode tag props dynamic children (f a)
+mapSpace f (ReactClassNode cls_ props dynamic children_ a) = ReactClassNode cls_ props dynamic children_ (f a)
+mapSpace f (DomNode tag props dynamic children_ a) = DomNode tag props dynamic children_ (f a)
+mapSpace f (ChildrenNode rs a) = ChildrenNode rs (f a)
 mapSpace f (TextNode s a) = TextNode s (f a)
 mapSpace f (Empty a) = Empty (f a)
 
@@ -42,17 +45,20 @@ instance functorPursFF :: Functor SpaceF where
 
 type SpaceM = Free SpaceF Unit
 
-rClsNode :: forall props. (ReactClass props) -> props -> SpaceM -> SpaceM
-rClsNode c p r = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) r unit))
+cls :: forall props. (ReactClass props) -> props -> SpaceM -> SpaceM
+cls c p r = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) r unit))
 
 rDOMNode :: String -> Array Props -> IsDynamic -> SpaceM -> SpaceM
 rDOMNode tag props dyn r = liftF $ SpaceF (mkExists (DomNode tag props dyn r unit))
 
-rTextNode :: String -> SpaceM
-rTextNode s = liftF $ SpaceF $ mkExists $ TextNode s unit
+text :: String -> SpaceM
+text s = liftF $ SpaceF $ mkExists $ TextNode s unit
 
-rEmptyNode :: SpaceM
-rEmptyNode = liftF (SpaceF (mkExists (Empty unit)))
+empty :: SpaceM
+empty = liftF (SpaceF (mkExists (Empty unit)))
+
+children :: Array ReactElement -> SpaceM
+children rs = liftF (SpaceF (mkExists (ChildrenNode rs unit)))
 
 class Propertable a where
   -- | Add a property to a vDOM node.
@@ -77,15 +83,15 @@ renderItem :: forall a. SpaceF a -> State (Array ReactElement) a
 renderItem (SpaceF e) = runExists renderItem' e
   where
     renderItem' :: forall props. Space a props -> State (Array ReactElement) a
-    renderItem' (ReactClassNode cls props (IsDynamic d) children rest)
-      = let cld = render children
-            createElement_ = if d then createElementDynamic else createElement
-        in state \s -> Tuple rest $ A.snoc s (createElement_ cls props cld)
-    renderItem' (DomNode tag props dynamic children rest)
-      = let cld = render children
-        in state \s -> Tuple rest $ A.snoc s (mkDOM dynamic tag props cld)
+    renderItem' (ReactClassNode cls_ props (IsDynamic d) chldrn rest)
+      = let createElement_ = if d then createElementDynamic else createElement
+        in state \s -> Tuple rest $ A.snoc s (createElement_ cls_ props (render chldrn))
+    renderItem' (DomNode tag props dynamic chldrn rest)
+      = state \s -> Tuple rest $ A.snoc s (mkDOM dynamic tag props (render chldrn))
     renderItem' (TextNode str rest)
-      = state \s -> Tuple rest $ A.snoc s (text str)
+      = state \s -> Tuple rest $ A.snoc s (R.text str)
+    renderItem' (ChildrenNode rs rest)
+      = state \s -> Tuple rest $ s <> rs
     renderItem' (Empty rest) = pure rest
 
 render :: SpaceM -> Array ReactElement

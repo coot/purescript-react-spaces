@@ -44,13 +44,15 @@ greeting
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-greeting = createClassStateless (\(Greeting { name, onChange }) -> renderIn D.div' do
+greeting = createClassStateless' (\(Greeting { name, onChange }) chldrn -> renderIn D.div' do
   div ! className "greeting" $ do
     label do
       div do
-        text "Hello "
-        text name
-        text if not (S.null name) then "!" else ""
+        h1 do
+          children chldrn
+          text " "
+          text name
+          text if not (S.null name) then "!" else ""
       input ! P.value name ! P.onChange (handleChange onChange) $ empty
     )
 
@@ -71,8 +73,9 @@ counter
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-counter = createClassStateless (\(Counter { counter: c, onClick: onClick' }) -> renderIn D.div' do
+counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) chldrn -> renderIn D.div' do
   div do
+    children chldrn
     span $ text (show c)
     button ! onClick (handleClick onClick') $ do
       text "count")
@@ -97,6 +100,8 @@ base = createClass (spc { displayName = "BaseClass" })
     renderFn this = do
       { counter, name } <- readState this
       pure $ do
-        cls greeting (Greeting { name, onChange: handleName this }) empty
-        cls counter (Counter { counter, onClick: handleCounter this }) empty
+	cls greeting (Greeting { name, onChange: handleName this }) $
+	  do span $ text "Hello"
+        cls counter (Counter { counter, onClick: handleCounter this }) $
+	  do h1 $ "Count on the sea..."
 ```

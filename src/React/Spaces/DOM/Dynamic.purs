@@ -2,18 +2,8 @@ module React.Spaces.DOM.Dynamic where
 
 import Control.Monad.Free (Free)
 import Prelude (Unit)
-import React (ReactClass)
 import React.DOM (IsDynamic(..))
-import React.Spaces (SpaceF, rClsNode, rDOMNode, rEmptyNode, rTextNode)
-
-cls :: forall p. ReactClass p -> p -> Free SpaceF Unit -> Free SpaceF Unit
-cls = rClsNode
-
-text :: String -> Free SpaceF Unit
-text = rTextNode
-
-empty :: Free SpaceF Unit
-empty = rEmptyNode
+import React.Spaces (SpaceF, rDOMNode)
 
 a :: Free SpaceF Unit -> Free SpaceF Unit
 a = rDOMNode "a" [] (IsDynamic true)
