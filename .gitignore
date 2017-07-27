@@ -6,3 +6,7 @@ node_modules
 # Generated files
 .psci
 output
+.purs-repl
+
+# Example
+example/index.js

@@ -1,4 +1,4 @@
-module React.Space where
+module React.Spaces where
 
 import Control.Monad.Free (Free, foldFree, hoistFree, liftF)
 import Control.Monad.State (State, execState, state)

@@ -1,5 +1,5 @@
 {
-  "name": "purescript-react-space",
+  "name": "purescript-react-spaces",
   "version": "0.1.0",
   "description": "React free monad markup",
   "main": "src/React/Space.purs",
@@ -12,6 +12,7 @@
     "react-dom": "^15.6.1"
   },
   "devDependencies": {
+    "http-server": "^0.10.0",
     "pulp": "^11.0.0"
   },
   "scripts": {

@@ -1,10 +1,10 @@
-module React.Space.DOM where
+module React.Spaces.DOM where
 
 import Control.Monad.Free (Free)
 import Prelude (Unit)
 import React (ReactClass)
 import React.DOM (IsDynamic(..))
-import React.Space (SpaceF, rClsNode, rDOMNode, rEmptyNode, rTextNode)
+import React.Spaces (SpaceF, rClsNode, rDOMNode, rEmptyNode, rTextNode)
 
 cls :: forall p. ReactClass p -> p -> Free SpaceF Unit -> Free SpaceF Unit
 cls = rClsNode

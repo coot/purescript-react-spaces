@@ -15,8 +15,8 @@ import React (ReactClass, ReactProps, ReactRefs, ReactState, ReadOnly, ReadWrite
 import React.DOM as D
 import React.DOM.Props (className, onClick)
 import React.DOM.Props as P
-import React.Space (renderIn, (!))
-import React.Space.DOM (button, cls, div, empty, input, label, span, text)
+import React.Spaces (renderIn, (!))
+import React.Spaces.DOM (button, cls, div, empty, input, label, span, text)
 import ReactDOM (render)
 import ReactHocs (setDisplayName)
 import Unsafe.Coerce (unsafeCoerce)
@@ -48,8 +48,7 @@ newtype Counter eff = Counter
 cCls :: forall eff. ReactClass (Counter (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
 cCls = setDisplayName "Counter" $ createClassStateless (\(Counter { counter, onClick: onClick' }) -> renderIn D.div' do
   div do
-    span do
-      text (show counter)
+    span $ text (show counter)
     button ! onClick (handleClick onClick') $ do
       text "count")
 
