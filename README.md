@@ -36,7 +36,14 @@ npm run example:serve
 
 It will compile the following simple example:
 ```purescript
-gCls :: forall eff. ReactClass (Greeting (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
+gCls
+  :: forall eff
+   . ReactClass
+      (Greeting
+	( props :: ReactProps
+	, refs :: ReactRefs ReadOnly
+	, state :: ReactState ReadWrite
+	| eff))
 gCls = createClassStateless (\(Greeting { name, onChange }) -> renderIn D.div' do
   div ! className "greeting" $ do
     label do
