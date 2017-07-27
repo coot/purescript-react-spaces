@@ -15,7 +15,7 @@ npm run example:serve
 
 ```purescript
 gCls :: forall eff. ReactClass (Greeting (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
-gCls = setDisplayName "Greeting" $ createClassStateless (\(Greeting { name, onChange }) -> renderIn D.div' do
+gCls = createClassStateless (\(Greeting { name, onChange }) -> renderIn D.div' do
   div ! className "greeting" $ do
     label do
       div do
@@ -35,7 +35,7 @@ newtype Counter eff = Counter
   , onClick :: Eff eff Unit
   }
 cCls :: forall eff. ReactClass (Counter (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
-cCls = setDisplayName "Counter" $ createClassStateless (\(Counter { counter, onClick: onClick' }) -> renderIn D.div' do
+cCls = createClassStateless (\(Counter { counter, onClick: onClick' }) -> renderIn D.div' do
   div do
     span $ text (show counter)
     button ! onClick (handleClick onClick') $ do
