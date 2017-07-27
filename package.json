@@ -1,0 +1,38 @@
+{
+  "name": "purescript-react-space",
+  "version": "0.1.0",
+  "description": "React free monad markup",
+  "main": "src/React/Space.purs",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-create-class": "^1.0.0",
+    "react-dom": "^15.6.1"
+  },
+  "devDependencies": {
+    "pulp": "^11.0.0"
+  },
+  "scripts": {
+    "example:build": "pulp browserify -I example/src -m Example.Main -t example/index.js",
+    "example:serve": "http-server example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/coot/purescript-react-space.git"
+  },
+  "keywords": [
+    "react",
+    "purescript",
+    "markup",
+    "jsx",
+    "free"
+  ],
+  "author": "Marcin Szamotulski",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/coot/purescript-react-space/issues"
+  },
+  "homepage": "https://github.com/coot/purescript-react-space#readme"
+}

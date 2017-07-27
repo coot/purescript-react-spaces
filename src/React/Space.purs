@@ -1,6 +1,6 @@
 module React.Space where
 
-import Control.Monad.Free (Free, foldFree, liftF)
+import Control.Monad.Free (Free, foldFree, hoistFree, liftF)
 import Control.Monad.State (State, execState, state)
 import Data.Array as A
 import Data.Exists (Exists, mkExists, runExists)
@@ -45,14 +45,33 @@ type SpaceM = Free SpaceF Unit
 rClsNode :: forall props. (ReactClass props) -> props -> SpaceM -> SpaceM
 rClsNode c p r = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) r unit))
 
-rDomNode :: String -> Array Props -> SpaceM -> SpaceM
-rDomNode tag props r = liftF $ SpaceF (mkExists (DomNode tag props (IsDynamic false) r unit))
+rDOMNode :: String -> Array Props -> IsDynamic -> SpaceM -> SpaceM
+rDOMNode tag props dyn r = liftF $ SpaceF (mkExists (DomNode tag props dyn r unit))
 
 rTextNode :: String -> SpaceM
 rTextNode s = liftF $ SpaceF $ mkExists $ TextNode s unit
 
 rEmptyNode :: SpaceM
 rEmptyNode = liftF (SpaceF (mkExists (Empty unit)))
+
+class Propertable a where
+  -- | Add a property to a vDOM node.
+  with :: a -> Props -> a
+
+infixl 4 with as !
+
+withAttribute :: forall a. SpaceF a -> Props -> SpaceF a
+withAttribute (SpaceF sp) p = SpaceF $ runExists (mkExists <<< withAttr) sp
+  where
+    withAttr :: forall props. Space a props -> Space a props
+    withAttr (DomNode s ps dyn r a) = DomNode s (A.snoc ps p) dyn r a
+    withAttr r = r
+
+instance propertableSpaceM :: Propertable (Free SpaceF Unit) where
+  with f p = hoistFree (\a -> withAttribute a p) f
+
+instance poertableSpaceF :: Propertable (Free SpaceF Unit -> Free SpaceF Unit) where
+  with f p m = f m `with` p
 
 renderItem :: forall a. SpaceF a -> State (Array ReactElement) a
 renderItem (SpaceF e) = runExists renderItem' e
