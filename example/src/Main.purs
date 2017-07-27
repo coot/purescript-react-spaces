@@ -25,8 +25,8 @@ newtype Greeting eff = Greeting
   { name :: String
   , onChange :: String -> Eff eff Unit }
 
-gCls :: forall eff. ReactClass (Greeting (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
-gCls = setDisplayName "Greeting" $ createClassStateless (\(Greeting { name, onChange }) -> renderIn D.div' do
+greeting :: forall eff. ReactClass (Greeting (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
+greeting = setDisplayName "Greeting" $ createClassStateless (\(Greeting { name, onChange }) -> renderIn D.div' do
   div ! className "greeting" $ do
     label do
       div do
@@ -45,10 +45,10 @@ newtype Counter eff = Counter
   { counter :: Int
   , onClick :: Eff eff Unit
   }
-cCls :: forall eff. ReactClass (Counter (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
-cCls = setDisplayName "Counter" $ createClassStateless (\(Counter { counter, onClick: onClick' }) -> renderIn D.div' do
+counter :: forall eff. ReactClass (Counter (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
+counter = setDisplayName "Counter" $ createClassStateless (\(Counter { counter: c, onClick: onClick' }) -> renderIn D.div' do
   div do
-    span $ text (show counter)
+    span $ text (show c)
     button ! onClick (handleClick onClick') $ do
       text "count")
 
@@ -64,13 +64,13 @@ base = createClass (spc { displayName = "BaseClass" })
       transformState this (_ { name = name })
 
     handleCounter this = do
-      transformState this (\st@{counter} -> st { counter = (counter + 1) })
+      transformState this (\st@{counter: c} -> st { counter = c + 1 })
 
     renderFn this = do
-      { counter, name } <- readState this
+      { counter: c, name } <- readState this
       pure $ do
-        cls gCls (Greeting { name, onChange: handleName this }) empty
-        cls cCls (Counter { counter, onClick: handleCounter this }) empty
+        cls greeting (Greeting { name, onChange: handleName this }) empty
+        cls counter (Counter { counter: c, onClick: handleCounter this }) empty
 
 findElmById :: forall e. ElementId -> Eff (dom :: DOM | e) Element
 findElmById _id = do

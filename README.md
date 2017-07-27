@@ -36,7 +36,7 @@ npm run example:serve
 
 It will compile the following simple example:
 ```purescript
-gCls
+greeting
   :: forall eff
    . ReactClass
       (Greeting
@@ -44,7 +44,7 @@ gCls
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-gCls = createClassStateless (\(Greeting { name, onChange }) -> renderIn D.div' do
+greeting = createClassStateless (\(Greeting { name, onChange }) -> renderIn D.div' do
   div ! className "greeting" $ do
     label do
       div do
@@ -63,7 +63,7 @@ newtype Counter eff = Counter
   { counter :: Int
   , onClick :: Eff eff Unit
   }
-cCls
+counter
   :: forall eff
    . ReactClass
       (Counter
@@ -71,11 +71,14 @@ cCls
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-cCls = createClassStateless (\(Counter { counter, onClick: onClick' }) -> renderIn D.div' do
+counter = createClassStateless (\(Counter { counter: c, onClick: onClick' }) -> renderIn D.div' do
   div do
-    span $ text (show counter)
+    span $ text (show c)
     button ! onClick (handleClick onClick') $ do
       text "count")
+
+  where
+    handleClick onClick ev = onClick
 
   where
     handleClick onClick ev = onClick
@@ -94,6 +97,6 @@ base = createClass (spc { displayName = "BaseClass" })
     renderFn this = do
       { counter, name } <- readState this
       pure $ do
-        cls gCls (Greeting { name, onChange: handleName this }) empty
-        cls cCls (Counter { counter, onClick: handleCounter this }) empty
+        cls greeting (Greeting { name, onChange: handleName this }) empty
+        cls counter (Counter { counter, onClick: handleCounter this }) empty
 ```
