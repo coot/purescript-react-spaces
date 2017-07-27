@@ -5,6 +5,26 @@
 
 It it is heavily inspired by [purescript-smolder](https://github.com/bodil/purescript-smolder).
 
+# Usage
+The top level module exports
+
+```purescript
+renderIn :: (Array ReactElement -> ReactElement) -> SpaceM -> ReactElement
+render :: SpaceM -> Array ReactElement
+```
+
+which you can chain with `render` method of your spec:
+```purescript
+s :: ReactSpec Unit Unit
+s = spec unit (map (renderIn React.DOM.div') <$> render)
+  where
+    render :: ReactThis Unit Unit -> SpaceM
+    render this = pure $
+      div ! className "greeting" $ do
+	text "Hello World!
+
+```
+
 # Example
 
 Run
@@ -13,6 +33,8 @@ npm run example:build
 npm run example:serve
 ```
 
+
+It will compile the following simple example:
 ```purescript
 gCls :: forall eff. ReactClass (Greeting (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
 gCls = createClassStateless (\(Greeting { name, onChange }) -> renderIn D.div' do
