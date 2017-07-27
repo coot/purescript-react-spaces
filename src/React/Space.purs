@@ -20,7 +20,6 @@ instance reactPropsNewtype :: (Newtype n r) => ReactProps n r where
 instance reactPropsRecord :: ReactProps (Record r) (Record r) where
   wrapProps = id
 
--- I need GADT or type families to do this polymorphically over props
 data Space a props
   = ReactClassNode (ReactClass props) props IsDynamic SpaceM a
   | DomNode String (Array Props) IsDynamic SpaceM a
@@ -33,6 +32,7 @@ mapSpace f (DomNode tag props dynamic children a) = DomNode tag props dynamic ch
 mapSpace f (TextNode s a) = TextNode s (f a)
 mapSpace f (Empty a) = Empty (f a)
 
+-- | `SpaceF` functor generating Free monad
 newtype SpaceF a = SpaceF (Exists (Space a))
 
 derive instance newtypeSpaceF :: Newtype (SpaceF a) _
