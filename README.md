@@ -1,5 +1,5 @@
 # purescript-react-space
-## Combinator library to write React vDOM
+**Combinator library for writting React vDOM**
 
 [![Maintainer: coot](https://img.shields.io/badge/maintainer-coot-lightgrey.svg)](http://github.com/coot)
 
