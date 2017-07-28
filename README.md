@@ -16,7 +16,7 @@ render :: SpaceM -> Array ReactElement
 which you can chain with `render` method of your spec:
 ```purescript
 s :: ReactSpec Unit Unit
-s = spec unit (map (renderIn React.DOM.div') <$> render)
+s = spec unit (map (renderIn React.DOM.div') <<< render)
   where
     render :: ReactThis Unit Unit -> SpaceM
     render this = pure $
@@ -86,7 +86,7 @@ counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) ch
 base :: ReactClass Unit
 base = createClass (spc { displayName = "BaseClass" })
   where
-    spc = spec { name: "John", counter: 0 } (map (renderIn React.DOM.div') <$> renderFn)
+    spc = spec { name: "John", counter: 0 } (map (renderIn React.DOM.div') <<< renderFn)
 
     handleName this name = do
       transformState this (_ { name = name })
