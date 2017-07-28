@@ -44,7 +44,7 @@ greeting
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-greeting = createClassStateless' (\(Greeting { name, onChange }) chldrn -> renderIn D.div' do
+greeting = createClassStateless' (\(Greeting { name, onChange }) chldrn -> renderIn React.DOM.div' do
   div ! className "greeting" $ do
     label do
       div do
@@ -73,7 +73,7 @@ counter
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) chldrn -> renderIn D.div' do
+counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) chldrn -> renderIn React.DOM.div' do
   div do
     children chldrn
     span $ text (show c)
@@ -86,7 +86,7 @@ counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) ch
 base :: ReactClass Unit
 base = createClass (spc { displayName = "BaseClass" })
   where
-    spc = spec { name: "John", counter: 0 } (map (renderIn D.div') <$> renderFn)
+    spc = spec { name: "John", counter: 0 } (map (renderIn React.DOM.div') <$> renderFn)
 
     handleName this name = do
       transformState this (_ { name = name })
