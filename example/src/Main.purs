@@ -10,7 +10,7 @@ import DOM.Node.Types (Element, ElementId(..), documentToNonElementParentNode)
 import Data.Maybe (fromJust)
 import Data.String as S
 import Partial.Unsafe (unsafePartial)
-import Prelude (Unit, bind, discard, map, not, pure, show, unit, void, ($), (+), (<$>), (<<<), (>>=))
+import Prelude (Unit, bind, discard, map, not, pure, show, unit, void, ($), (+), (<<<), (>>=))
 import React (ReactClass, ReactProps, ReactRefs, ReactState, ReadOnly, ReadWrite, createClass, createClassStateless', createElement, readState, spec, transformState)
 import React.DOM as D
 import React.DOM.Props (className, onClick)
@@ -26,17 +26,17 @@ newtype Greeting eff = Greeting
   , onChange :: String -> Eff eff Unit }
 
 greeting :: forall eff. ReactClass (Greeting (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
-greeting = setDisplayName "Greeting" $ createClassStateless' (\(Greeting { name, onChange }) chldrn -> renderIn D.div' do
-  div ! className "greeting" $ do
-    label do
-      div do
-        h1 do
-          children chldrn
-          text " "
-          text name
-          text if not (S.null name) then "!" else ""
-      input ! P.value name ! P.onChange (handleChange onChange) $ empty
-    )
+greeting = setDisplayName "Greeting" $ createClassStateless' \(Greeting { name, onChange }) chldrn
+  -> renderIn D.div' do
+    div ! className "greeting" $ do
+      label do
+        div do
+          h1 do
+            children chldrn
+            text " "
+            text name
+            text if not (S.null name) then "!" else ""
+        input ! P.value name ! P.onChange (handleChange onChange) $ empty
 
   where 
     handleChange onChange ev = do
@@ -48,12 +48,13 @@ newtype Counter eff = Counter
   , onClick :: Eff eff Unit
   }
 counter :: forall eff. ReactClass (Counter (props :: ReactProps, refs :: ReactRefs ReadOnly, state :: ReactState ReadWrite | eff))
-counter = setDisplayName "Counter" $ createClassStateless' (\(Counter { counter: c, onClick: onClick' }) chldrn -> renderIn D.div' do
-  div do
-    children chldrn
-    span $ text (show c)
-    button ! onClick (handleClick onClick') $ do
-      text "count")
+counter = setDisplayName "Counter" $ createClassStateless' \(Counter { counter: c, onClick: onClick' }) chldrn
+  -> renderIn D.div' do
+    div do
+      children chldrn
+      span $ text (show c)
+      button ! onClick (handleClick onClick') $ do
+        text "count"
 
   where
     handleClick onClick ev = onClick
@@ -61,7 +62,7 @@ counter = setDisplayName "Counter" $ createClassStateless' (\(Counter { counter:
 base :: ReactClass Unit
 base = createClass (spc { displayName = "BaseClass" })
   where
-    spc = spec { name: "Saylor", counter: 0 } (map (renderIn D.div') <$> renderFn)
+    spc = spec { name: "Saylor", counter: 0 } (map (renderIn D.div') <<< renderFn)
 
     handleName this name = do
       transformState this (_ { name = name })

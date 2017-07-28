@@ -44,17 +44,17 @@ greeting
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-greeting = createClassStateless' (\(Greeting { name, onChange }) chldrn -> renderIn React.DOM.div' do
-  div ! className "greeting" $ do
-    label do
-      div do
-        h1 do
-          children chldrn
-          text " "
-          text name
-          text if not (S.null name) then "!" else ""
-      input ! P.value name ! P.onChange (handleChange onChange) $ empty
-    )
+greeting = createClassStateless' \(Greeting { name, onChange }) chldrn
+  -> renderIn React.DOM.div' do
+    div ! className "greeting" $ do
+      label do
+	div do
+	  h1 do
+	    children chldrn
+	    text " "
+	    text name
+	    text if not (S.null name) then "!" else ""
+	input ! P.value name ! P.onChange (handleChange onChange) $ empty
 
   where 
     handleChange onChange ev = do
@@ -73,12 +73,13 @@ counter
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) chldrn -> renderIn React.DOM.div' do
-  div do
-    children chldrn
-    span $ text (show c)
-    button ! onClick (handleClick onClick') $ do
-      text "count")
+counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) chldrn
+  -> renderIn React.DOM.div' do
+    div do
+      children chldrn
+      span $ text (show c)
+      button ! onClick (handleClick onClick') $ do
+	text "count")
 
   where
     handleClick onClick ev = onClick
