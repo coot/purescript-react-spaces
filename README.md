@@ -83,9 +83,6 @@ counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) ch
   where
     handleClick onClick ev = onClick
 
-  where
-    handleClick onClick ev = onClick
-
 base :: ReactClass Unit
 base = createClass (spc { displayName = "BaseClass" })
   where
