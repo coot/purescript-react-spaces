@@ -4,22 +4,13 @@ import Control.Monad.Free (Free, foldFree, hoistFree, liftF)
 import Control.Monad.State (State, execState, state)
 import Data.Array as A
 import Data.Exists (Exists, mkExists, runExists)
-import Data.Newtype (class Newtype, over, wrap)
+import Data.Newtype (class Newtype, over)
 import Data.Tuple (Tuple(..))
-import Prelude (class Functor, Unit, id, pure, unit, ($), (<<<), (<>))
+import Prelude (class Functor, Unit, pure, unit, ($), (<<<), (<>))
 import React (ReactClass, ReactElement, createElement, createElementDynamic)
 import React.DOM (IsDynamic(..), mkDOM)
 import React.DOM (text) as R
 import React.DOM.Props (Props)
-
-class ReactProps n r | n -> r where
-  wrapProps :: r -> n
-
-instance reactPropsNewtype :: (Newtype n r) => ReactProps n r where
-  wrapProps = wrap
-
-instance reactPropsRecord :: ReactProps (Record r) (Record r) where
-  wrapProps = id
 
 data Space a props
   = ReactClassNode (ReactClass props) props IsDynamic SpaceM a
@@ -76,7 +67,7 @@ withAttribute (SpaceF sp) p = SpaceF $ runExists (mkExists <<< withAttr) sp
 instance propertableSpaceM :: Propertable (Free SpaceF Unit) where
   with f p = hoistFree (\a -> withAttribute a p) f
 
-instance poertableSpaceF :: Propertable (Free SpaceF Unit -> Free SpaceF Unit) where
+instance propertableSpaceF :: Propertable (Free SpaceF Unit -> Free SpaceF Unit) where
   with f p m = f m `with` p
 
 renderItem :: forall a. SpaceF a -> State (Array ReactElement) a
