@@ -15,7 +15,7 @@ import React.DOM.Props (Props)
 data Space a props
   = ReactClassNode (ReactClass props) props IsDynamic SpaceM a
   | DomNode String (Array Props) IsDynamic SpaceM a
-  | TextNode String a
+  | ReactElementNode ReactElement a
   | ChildrenNode (Array ReactElement) a
   | Empty a
 
@@ -23,7 +23,7 @@ mapSpace :: forall a b props. (a -> b) -> Space a props -> Space b props
 mapSpace f (ReactClassNode cls_ props dynamic children_ a) = ReactClassNode cls_ props dynamic children_ (f a)
 mapSpace f (DomNode tag props dynamic children_ a) = DomNode tag props dynamic children_ (f a)
 mapSpace f (ChildrenNode rs a) = ChildrenNode rs (f a)
-mapSpace f (TextNode s a) = TextNode s (f a)
+mapSpace f (ReactElementNode el a) = ReactElementNode el (f a)
 mapSpace f (Empty a) = Empty (f a)
 
 -- | `SpaceF` functor generating Free monad
@@ -43,10 +43,13 @@ rDOMNode :: String -> Array Props -> IsDynamic -> SpaceM -> SpaceM
 rDOMNode tag props dyn r = liftF $ SpaceF (mkExists (DomNode tag props dyn r unit))
 
 text :: String -> SpaceM
-text s = liftF $ SpaceF $ mkExists $ TextNode s unit
+text s = liftF $ SpaceF $ mkExists $ ReactElementNode (R.text s) unit
 
 empty :: SpaceM
 empty = liftF (SpaceF (mkExists (Empty unit)))
+
+element :: ReactElement -> SpaceM
+element el = liftF $ SpaceF $ mkExists $ ReactElementNode el unit
 
 children :: Array ReactElement -> SpaceM
 children rs = liftF (SpaceF (mkExists (ChildrenNode rs unit)))
@@ -79,8 +82,8 @@ renderItem (SpaceF e) = runExists renderItem' e
         in state \s -> Tuple rest $ A.snoc s (createElement_ cls_ props (render chldrn))
     renderItem' (DomNode tag props dynamic chldrn rest)
       = state \s -> Tuple rest $ A.snoc s (mkDOM dynamic tag props (render chldrn))
-    renderItem' (TextNode str rest)
-      = state \s -> Tuple rest $ A.snoc s (R.text str)
+    renderItem' (ReactElementNode el rest)
+      = state \s -> Tuple rest (A.snoc s el)
     renderItem' (ChildrenNode rs rest)
       = state \s -> Tuple rest $ s <> rs
     renderItem' (Empty rest) = pure rest
