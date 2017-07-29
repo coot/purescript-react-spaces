@@ -47,9 +47,6 @@ blockquote = rDOMNode "blockquote" [] (IsDynamic true)
 body :: Free SpaceF Unit -> Free SpaceF Unit
 body = rDOMNode "body" [] (IsDynamic true)
 
-br :: Free SpaceF Unit -> Free SpaceF Unit
-br = rDOMNode "br" [] (IsDynamic true)
-
 button :: Free SpaceF Unit -> Free SpaceF Unit
 button = rDOMNode "button" [] (IsDynamic true)
 
@@ -155,14 +152,8 @@ html = rDOMNode "html" [] (IsDynamic true)
 i :: Free SpaceF Unit -> Free SpaceF Unit
 i = rDOMNode "i" [] (IsDynamic true)
 
-iframe :: Free SpaceF Unit -> Free SpaceF Unit
-iframe = rDOMNode "iframe" [] (IsDynamic true)
-
-img :: Free SpaceF Unit -> Free SpaceF Unit
-img = rDOMNode "img" [] (IsDynamic true)
-
-input :: Free SpaceF Unit -> Free SpaceF Unit
-input = rDOMNode "input" [] (IsDynamic true)
+iframe' :: Free SpaceF Unit -> Free SpaceF Unit
+iframe' = rDOMNode "iframe" [] (IsDynamic true)
 
 ins :: Free SpaceF Unit -> Free SpaceF Unit
 ins = rDOMNode "ins" [] (IsDynamic true)
@@ -302,9 +293,6 @@ tbody = rDOMNode "tbody" [] (IsDynamic true)
 td :: Free SpaceF Unit -> Free SpaceF Unit
 td = rDOMNode "td" [] (IsDynamic true)
 
-textarea :: Free SpaceF Unit -> Free SpaceF Unit
-textarea = rDOMNode "textarea" [] (IsDynamic true)
-
 tfoot :: Free SpaceF Unit -> Free SpaceF Unit
 tfoot = rDOMNode "tfoot" [] (IsDynamic true)
 
@@ -323,9 +311,6 @@ title = rDOMNode "title" [] (IsDynamic true)
 tr :: Free SpaceF Unit -> Free SpaceF Unit
 tr = rDOMNode "tr" [] (IsDynamic true)
 
-track :: Free SpaceF Unit -> Free SpaceF Unit
-track = rDOMNode "track" [] (IsDynamic true)
-
 u :: Free SpaceF Unit -> Free SpaceF Unit
 u = rDOMNode "u" [] (IsDynamic true)
 
@@ -337,6 +322,3 @@ var = rDOMNode "var" [] (IsDynamic true)
 
 video :: Free SpaceF Unit -> Free SpaceF Unit
 video = rDOMNode "video" [] (IsDynamic true)
-
-wbr :: Free SpaceF Unit -> Free SpaceF Unit
-wbr = rDOMNode "body" [] (IsDynamic true)
