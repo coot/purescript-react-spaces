@@ -36,8 +36,15 @@ instance functorPursFF :: Functor SpaceF where
 
 type SpaceM = Free SpaceF Unit
 
-cls :: forall props. (ReactClass props) -> props -> SpaceM -> SpaceM
-cls c p r = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) r unit))
+cls :: forall props. (ReactClass props) -> props -> SpaceM
+cls c p = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) empty unit))
+
+infixl 3 cls as ^
+
+cls' :: forall props. (ReactClass props) -> props -> SpaceM -> SpaceM
+cls' c p r = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) r unit))
+
+infixl 4 cls' as ^.
 
 rDOMNode :: String -> Array Props -> IsDynamic -> SpaceM -> SpaceM
 rDOMNode tag props dyn r = liftF $ SpaceF (mkExists (DomNode tag props dyn r unit))
@@ -51,6 +58,8 @@ empty = liftF (SpaceF (mkExists (Empty unit)))
 element :: ReactElement -> SpaceM
 element el = liftF $ SpaceF $ mkExists $ ReactElementNode el unit
 
+-- children can be implement using `element` (as `sequence_ <<< map element`)
+-- but this will be more performant.
 children :: Array ReactElement -> SpaceM
 children rs = liftF (SpaceF (mkExists (ChildrenNode rs unit)))
 
