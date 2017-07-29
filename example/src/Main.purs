@@ -15,7 +15,7 @@ import React (ReactClass, ReactProps, ReactRefs, ReactState, ReadOnly, ReadWrite
 import React.DOM as D
 import React.DOM.Props (className, onClick)
 import React.DOM.Props as P
-import React.Spaces (children, cls, empty, renderIn, text, (!))
+import React.Spaces (children, empty, renderIn, text, (!), (^^))
 import React.Spaces.DOM (button, div, h1, input, label, span)
 import ReactDOM (render)
 import ReactHocs (setDisplayName)
@@ -73,10 +73,9 @@ base = createClass (spc { displayName = "BaseClass" })
     renderFn this = do
       { counter: c, name } <- readState this
       pure $ do
-        cls greeting (Greeting { name, onChange: handleName this }) $
+        greeting ^^ (Greeting { name, onChange: handleName this }) $
           do span $ text "Hello"
-
-        cls counter (Counter { counter: c, onClick: handleCounter this }) $
+        counter ^^ (Counter { counter: c, onClick: handleCounter this }) $
           do h1 $ text "Count days on the sea..."
 
 findElmById :: forall e. ElementId -> Eff (dom :: DOM | e) Element

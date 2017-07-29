@@ -44,7 +44,7 @@ infixl 3 cls as ^
 cls' :: forall props. (ReactClass props) -> props -> SpaceM -> SpaceM
 cls' c p r = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) r unit))
 
-infixl 4 cls' as ^.
+infixl 3 cls' as ^^
 
 rDOMNode :: String -> Array Props -> IsDynamic -> SpaceM -> SpaceM
 rDOMNode tag props dyn r = liftF $ SpaceF (mkExists (DomNode tag props dyn r unit))
