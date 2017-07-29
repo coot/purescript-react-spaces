@@ -36,36 +36,44 @@ instance functorPursFF :: Functor SpaceF where
 
 type SpaceM = Free SpaceF Unit
 
+-- | Class without children.
 cls :: forall props. (ReactClass props) -> props -> SpaceM
 cls c p = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) empty unit))
 
 infixl 3 cls as ^
 
+-- | Class with children.
 cls' :: forall props. (ReactClass props) -> props -> SpaceM -> SpaceM
 cls' c p r = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) r unit))
 
 infixl 3 cls' as ^^
 
--- | Class with dynamic children 
+-- | Class with dynamic children.
 dCls' :: forall props. (ReactClass props) -> props -> SpaceM -> SpaceM
 dCls' c p r = liftF $ SpaceF (mkExists (ReactClassNode c p (IsDynamic false) r unit))
 
 infixl 3 dCls' as ^+
 
+-- | React vDOM node.  You'd rather want to use `React.Spaces.DOM` or `React.Spaces.DOM.Dynamic`.
 rDOMNode :: String -> Array Props -> IsDynamic -> SpaceM -> SpaceM
 rDOMNode tag props dyn r = liftF $ SpaceF (mkExists (DomNode tag props dyn r unit))
 
+-- | Text node.
 text :: String -> SpaceM
 text s = liftF $ SpaceF $ mkExists $ ReactElementNode (R.text s) unit
 
+-- | Empty node.
 empty :: SpaceM
 empty = liftF (SpaceF (mkExists (Empty unit)))
 
+-- | Single element node.
 element :: ReactElement -> SpaceM
 element el = liftF $ SpaceF $ mkExists $ ReactElementNode el unit
 
--- children can be implement using `element` (as `sequence_ <<< map element`)
--- but this will be more performant.
+-- | Add multiple elements at once
+-- |
+-- | Children can be implement using `element` (as `sequence_ <<< map element`)
+-- | but this will be more performant.
 children :: Array ReactElement -> SpaceM
 children rs = liftF (SpaceF (mkExists (ChildrenNode rs unit)))
 
@@ -73,6 +81,10 @@ class Propertable a where
   -- | Add a property to a vDOM node.
   with :: a -> Props -> a
 
+-- | Combinator which adds `React.DOM.Props.Props` properties to react vDOM nodes.
+-- | ```purescript
+-- |  div ! className "container" ! onClick clickHandler $ do text "Hello"
+-- | ```
 infixl 4 with as !
 
 withAttribute :: forall a. SpaceF a -> Props -> SpaceF a
