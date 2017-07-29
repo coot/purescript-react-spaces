@@ -10,3 +10,7 @@ output
 
 # Example
 example/index.js
+
+# Benchmarks
+/benchmarks
+/tmp
