@@ -142,3 +142,6 @@ mSpec = spec unit renderFn
 	sequence_ mNameNode
 ```
 Checkout [examples](https://github.com/coot/purescript-react-spaces/blob/master/examples/src/Echo.purs#L73) for a `echoApp` component.
+
+For another example you can check out
+[purescript-isomorphic-react-example](https://github.com/coot/purescript-isomorphic-react-example/blob/master/src/Jam/App.purs#L249).
