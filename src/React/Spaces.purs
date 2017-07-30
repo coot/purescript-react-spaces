@@ -37,8 +37,8 @@ import React.DOM (text) as R
 import React.DOM.Props (Props)
 
 data Space a props
-  = ReactClassNode (ReactClass props) props IsDynamic SpaceM a
-  | DomNode String (Array Props) IsDynamic SpaceM a
+  = DomNode String (Array Props) IsDynamic SpaceM a
+  | ReactClassNode (ReactClass props) props IsDynamic SpaceM a
   | ReactElementNode ReactElement a
   | ChildrenNode (Array ReactElement) a
   | Empty a
@@ -133,11 +133,11 @@ renderItem :: forall a. SpaceF a -> State (Array ReactElement) a
 renderItem (SpaceF e) = runExists renderItem' e
   where
     renderItem' :: forall props. Space a props -> State (Array ReactElement) a
+    renderItem' (DomNode tag props dynamic chldrn rest)
+      = state \s -> Tuple rest $ A.snoc s (mkDOM dynamic tag props (render chldrn))
     renderItem' (ReactClassNode cls_ props (IsDynamic d) chldrn rest)
       = let createElement_ = if d then createElementDynamic else createElement
         in state \s -> Tuple rest $ A.snoc s (createElement_ cls_ props (render chldrn))
-    renderItem' (DomNode tag props dynamic chldrn rest)
-      = state \s -> Tuple rest $ A.snoc s (mkDOM dynamic tag props (render chldrn))
     renderItem' (ReactElementNode el rest)
       = state \s -> Tuple rest (A.snoc s el)
     renderItem' (ChildrenNode rs rest)
