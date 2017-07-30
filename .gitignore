@@ -10,6 +10,7 @@ output
 
 # Example
 examples/index.js
+examples/index.js.map
 
 # Benchmarks
 /benchmarks
