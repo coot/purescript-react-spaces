@@ -2,7 +2,7 @@
 **Combinator library for writting React vDOM**
 
 [![Maintainer: coot](https://img.shields.io/badge/maintainer-coot-lightgrey.svg)](http://github.com/coot)
-[![Documentation](https://pursuit.purescript.org/packages/purescript-react-spaces/badge)](spaces//pursuit.purescript.org/packages/purescript-react-spaces)
+[![Documentation](https://pursuit.purescript.org/packages/purescript-react-spaces/badge)](https://pursuit.purescript.org/packages/purescript-react-spaces)
 
 It it is heavily inspired by [purescript-smolder](https://github.com/bodil/purescript-smolder).
 
