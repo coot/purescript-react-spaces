@@ -9,7 +9,7 @@ output
 .purs-repl
 
 # Example
-example/index.js
+examples/index.js
 
 # Benchmarks
 /benchmarks

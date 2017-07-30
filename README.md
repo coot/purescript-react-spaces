@@ -115,3 +115,27 @@ base = createClass (spc { displayName = "BaseClass" })
 	  $ do
 	    h1 $ "Count on the sea..."
 ```
+
+Often in `React` you want to render a node which is present under some
+condition.  You might have a `Maybe String` in your props that you'd like to
+show only if you have a `Just` value.  Since `SpaceM` is a `Foldable` instance
+you can do that in this way:
+```
+nCls :: ReactClass { name :: String }
+nCls = createClassStateless \{ name } -> renderIn React.DOM.div' do
+  h1 ! className "title" $ do
+    text "Hello "
+    span ! className "name" $ text name
+
+mSpec :: forall eff. ReactSpec { mName :: Maybe String } Unit eff
+mSpec = spec unit renderFn
+  where
+    renderFn this = do
+      { mName } <- getProps this
+      let mNameNode = (nCls ^ _) <$> mName
+      pure $ renderIn React.DOM.div' $ do
+	h1 ! className "app" $ do
+	  text "Hello App"
+	sequence_ mNameNode
+```
+Checkout examples for a `echoApp` component.

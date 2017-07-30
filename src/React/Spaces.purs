@@ -27,9 +27,10 @@ import Control.Monad.Free (Free, foldFree, hoistFree, liftF)
 import Control.Monad.State (State, execState, state)
 import Data.Array as A
 import Data.Exists (Exists, mkExists, runExists)
+import Data.Foldable (class Foldable, sequence_)
 import Data.Newtype (class Newtype, over)
 import Data.Tuple (Tuple(..))
-import Prelude (class Functor, Unit, pure, unit, ($), (<<<), (<>))
+import Prelude (class Functor, Unit, map, pure, unit, ($), (<<<), (<>))
 import React (ReactClass, ReactElement, createElement, createElementDynamic)
 import React.DOM (IsDynamic(..), mkDOM)
 import React.DOM (text) as R
@@ -57,6 +58,7 @@ derive instance newtypeSpaceF :: Newtype (SpaceF a) _
 instance functorPursFF :: Functor SpaceF where
   map f = over SpaceF $ runExists (mkExists <<< mapSpace f)
 
+-- | Free monad which is used to build react's vDOM tree.
 type SpaceM = Free SpaceF Unit
 
 -- | Class without children.
@@ -101,8 +103,8 @@ children :: Array ReactElement -> SpaceM
 children rs = liftF (SpaceF (mkExists (ChildrenNode rs unit)))
 
 -- | Alias for `children`.
-elements :: Array ReactElement -> SpaceM
-elements = children
+elements :: forall f. Functor f => Foldable f => f ReactElement -> SpaceM
+elements = sequence_ <<< map element
 
 class Propertable a where
   -- | Add a property to a vDOM node.

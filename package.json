@@ -16,8 +16,9 @@
     "pulp": "^11.0.0"
   },
   "scripts": {
-    "example:build": "pulp browserify -I example/src -m Example.Main -t example/index.js",
-    "example:serve": "http-server example"
+    "examples:build": "pulp browserify -I examples/src -m Examples.Main -t examples/index.js",
+    "examples:dev": "pulp --watch browserify -I examples/src -m Examples.Main -t examples/index.js",
+    "examples:serve": "http-server examples"
   },
   "repository": {
     "type": "git",

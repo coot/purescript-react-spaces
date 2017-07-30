@@ -1,4 +1,4 @@
-module Example.Main where
+module Examples.Main where
 
 import Control.Monad.Eff (Eff)
 import DOM (DOM)
@@ -9,13 +9,14 @@ import DOM.Node.NonElementParentNode (getElementById)
 import DOM.Node.Types (Element, ElementId(..), documentToNonElementParentNode)
 import Data.Maybe (fromJust)
 import Data.String as S
+import Examples.Echo (echoApp)
 import Partial.Unsafe (unsafePartial)
 import Prelude (Unit, bind, discard, map, not, pure, show, unit, void, ($), (+), (<<<), (>>=))
 import React (ReactClass, ReactProps, ReactRefs, ReactState, ReadOnly, ReadWrite, createClass, createClassStateless', createElement, readState, spec, transformState)
 import React.DOM as D
 import React.DOM.Props (className, onClick)
 import React.DOM.Props as P
-import React.Spaces (elements, renderIn, text, (!), (^^))
+import React.Spaces (elements, renderIn, text, (!), (^), (^^))
 import React.Spaces.DOM (button, div, h1, input, label, span)
 import ReactDOM (render)
 import ReactHocs (setDisplayName)
@@ -80,6 +81,8 @@ base = createClass (spc { displayName = "BaseClass" })
         counter ^^ (Counter { counter: c, onClick: handleCounter this })
           $ do
             h1 $ text "Count days on the sea..."
+
+        echoApp ^ unit
 
 findElmById :: forall e. ElementId -> Eff (dom :: DOM | e) Element
 findElmById _id = do
