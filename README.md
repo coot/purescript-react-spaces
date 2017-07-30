@@ -116,10 +116,12 @@ base = createClass (spc { displayName = "BaseClass" })
 	    h1 $ "Count on the sea..."
 ```
 
+# Rendering using `sequence_`
+
 Often in `React` you want to render a node which is present under some
 condition.  You might have a `Maybe String` in your props that you'd like to
-show only if you have a `Just` value.  Since `SpaceM` is a `Foldable` instance
-you can do that in this way:
+show only if you have a `Just` value.  Since `SpaceM` is an instance of
+`Foldable` type class you can do that in this way:
 ```
 nCls :: ReactClass { name :: String }
 nCls = createClassStateless \{ name } -> renderIn React.DOM.div' do
@@ -138,4 +140,4 @@ mSpec = spec unit renderFn
 	  text "Hello App"
 	sequence_ mNameNode
 ```
-Checkout examples for a `echoApp` component.
+Checkout [examples](https://github.com/coot/purescript-react-spaces/blob/master/examples/src/Echo.purs#L73) for a `echoApp` component.
