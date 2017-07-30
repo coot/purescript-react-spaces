@@ -9,8 +9,14 @@ It it is heavily inspired by [purescript-smolder](https://github.com/bodil/pures
 The top level module exports
 
 ```purescript
-renderIn :: (Array ReactElement -> ReactElement) -> SpaceM -> ReactElement
-render :: SpaceM -> Array ReactElement
+renderIn
+  :: (Array ReactElement -> ReactElement)
+  -> SpaceM
+  -> ReactElement
+
+render
+  :: SpaceM
+  -> Array ReactElement
 ```
 
 which you can chain with `render` method of your spec:
@@ -44,17 +50,19 @@ greeting
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-greeting = createClassStateless' \(Greeting { name, onChange }) chldrn
+greeting = createClassStateless'
+  \(Greeting { name, onChange }) chldrn
   -> renderIn React.DOM.div' do
     div ! className "greeting" $ do
       label do
 	div do
 	  h1 do
-	    children chldrn
+	    elements chldrn
 	    text " "
 	    text name
 	    text if not (S.null name) then "!" else ""
-	input ! P.value name ! P.onChange (handleChange onChange) $ empty
+	-- note that you don't need to pass `empty` to `input`
+	input ! P.value name ! P.onChange (handleChange onChange)
 
   where 
     handleChange onChange ev = do
@@ -73,10 +81,11 @@ counter
 	, refs :: ReactRefs ReadOnly
 	, state :: ReactState ReadWrite
 	| eff))
-counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) chldrn
+counter = createClassStateless'
+  (\(Counter { counter: c, onClick: onClick' }) chldrn
   -> renderIn React.DOM.div' do
     div do
-      children chldrn
+      elements chldrn
       span $ text (show c)
       button ! onClick (handleClick onClick') $ do
 	text "count")
@@ -87,7 +96,8 @@ counter = createClassStateless' (\(Counter { counter: c, onClick: onClick' }) ch
 base :: ReactClass Unit
 base = createClass (spc { displayName = "BaseClass" })
   where
-    spc = spec { name: "John", counter: 0 } (map (renderIn React.DOM.div') <<< renderFn)
+    spc = spec { name: "John", counter: 0 }
+      (map (renderIn React.DOM.div') <<< renderFn)
 
     handleName this name = do
       transformState this (_ { name = name })
@@ -98,8 +108,10 @@ base = createClass (spc { displayName = "BaseClass" })
     renderFn this = do
       { counter, name } <- readState this
       pure $ do
-	cls greeting (Greeting { name, onChange: handleName this }) $
-	  do span $ text "Hello"
-        cls counter (Counter { counter, onClick: handleCounter this }) $
-	  do h1 $ "Count on the sea..."
+	greeting ^^ (Greeting { name, onChange: handleName this })
+	  $ do
+	    span $ text "Hello"
+        counter ^^ (Counter { counter, onClick: handleCounter this })
+	  $ do
+	    h1 $ "Count on the sea..."
 ```

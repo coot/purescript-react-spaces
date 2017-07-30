@@ -15,7 +15,7 @@ import React (ReactClass, ReactProps, ReactRefs, ReactState, ReadOnly, ReadWrite
 import React.DOM as D
 import React.DOM.Props (className, onClick)
 import React.DOM.Props as P
-import React.Spaces (children, empty, renderIn, text, (!), (^^))
+import React.Spaces (elements, renderIn, text, (!), (^^))
 import React.Spaces.DOM (button, div, h1, input, label, span)
 import ReactDOM (render)
 import ReactHocs (setDisplayName)
@@ -32,11 +32,12 @@ greeting = setDisplayName "Greeting" $ createClassStateless' \(Greeting { name, 
       label do
         div do
           h1 do
-            children chldrn
+            elements chldrn
             text " "
             text name
             text if not (S.null name) then "!" else ""
-        input ! P.value name ! P.onChange (handleChange onChange) $ empty
+        -- note that you don't need to pass `empty` to `input`
+        input ! P.value name ! P.onChange (handleChange onChange)
 
   where 
     handleChange onChange ev = do
@@ -51,7 +52,7 @@ counter :: forall eff. ReactClass (Counter (props :: ReactProps, refs :: ReactRe
 counter = setDisplayName "Counter" $ createClassStateless' \(Counter { counter: c, onClick: onClick' }) chldrn
   -> renderIn D.div' do
     div do
-      children chldrn
+      elements chldrn
       span $ text (show c)
       button ! onClick (handleClick onClick') $ do
         text "count"
@@ -73,10 +74,12 @@ base = createClass (spc { displayName = "BaseClass" })
     renderFn this = do
       { counter: c, name } <- readState this
       pure $ do
-        greeting ^^ (Greeting { name, onChange: handleName this }) $
-          do span $ text "Hello"
-        counter ^^ (Counter { counter: c, onClick: handleCounter this }) $
-          do h1 $ text "Count days on the sea..."
+        greeting ^^ (Greeting { name, onChange: handleName this })
+          $ do
+            span $ text "Hello"
+        counter ^^ (Counter { counter: c, onClick: handleCounter this })
+          $ do
+            h1 $ text "Count days on the sea..."
 
 findElmById :: forall e. ElementId -> Eff (dom :: DOM | e) Element
 findElmById _id = do

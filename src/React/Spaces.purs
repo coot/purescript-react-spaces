@@ -12,6 +12,7 @@ module React.Spaces
   , text
   , empty
   , element
+  , elements
   , children
   , rDOMNode
 
@@ -98,6 +99,10 @@ element el = liftF $ SpaceF $ mkExists $ ReactElementNode el unit
 -- | but this will be more performant.
 children :: Array ReactElement -> SpaceM
 children rs = liftF (SpaceF (mkExists (ChildrenNode rs unit)))
+
+-- | Alias for `children`.
+elements :: Array ReactElement -> SpaceM
+elements = children
 
 class Propertable a where
   -- | Add a property to a vDOM node.
