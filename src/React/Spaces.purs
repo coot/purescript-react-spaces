@@ -1,4 +1,26 @@
-module React.Spaces where
+module React.Spaces
+  ( Space(..)
+  , SpaceF(SpaceF)
+  , SpaceM
+
+  , cls
+  , (^)
+  , cls'
+  , (^^)
+  , dCls'
+  , (^+)
+  , text
+  , empty
+  , element
+  , children
+  , rDOMNode
+
+  , class Propertable, with
+  , (!)
+
+  , render
+  , renderIn
+  ) where
 
 import Control.Monad.Free (Free, foldFree, hoistFree, liftF)
 import Control.Monad.State (State, execState, state)
@@ -88,11 +110,11 @@ class Propertable a where
 infixl 4 with as !
 
 withAttribute :: forall a. SpaceF a -> Props -> SpaceF a
-withAttribute (SpaceF sp) p = SpaceF $ runExists (mkExists <<< withAttr) sp
-  where
-    withAttr :: forall props. Space a props -> Space a props
-    withAttr (DomNode s ps dyn r a) = DomNode s (A.snoc ps p) dyn r a
-    withAttr r = r
+withAttribute (SpaceF sp) p = SpaceF $ runExists (mkExists <<< withAttr p) sp
+
+withAttr :: forall props a. Props -> Space a props -> Space a props
+withAttr p (DomNode s ps dyn r a) = DomNode s (A.snoc ps p) dyn r a
+withAttr _ r = r
 
 instance propertableSpaceM :: Propertable (Free SpaceF Unit) where
   with f p = hoistFree (\a -> withAttribute a p) f
@@ -115,8 +137,21 @@ renderItem (SpaceF e) = runExists renderItem' e
       = state \s -> Tuple rest $ s <> rs
     renderItem' (Empty rest) = pure rest
 
+-- | Render `SpaceM` momnad as an `Array ReactElement`.
 render :: SpaceM -> Array ReactElement
 render f = execState (foldFree renderItem f) []
 
+-- | Render `SpaceM` monad inside a wrapper element.
+-- | ``` purescript
+-- | btn :: forall eff. ReactSpec Unit Unit eff
+-- | btn = (spec unit render)
+-- |  where
+-- |    render this =
+-- |      pure $ renderIn React.DOM.div' do
+-- |        button ! className "btn" ! onClick (handleClick this) $ do
+-- |          text "Click me!"
+-- |
+-- |    handleClick thie ev = pure unit
+-- | ```
 renderIn :: (Array ReactElement -> ReactElement) -> SpaceM -> ReactElement
 renderIn cnt = cnt <<< render

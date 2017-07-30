@@ -47,6 +47,7 @@ blockquote = rDOMNode "blockquote" [] (IsDynamic false)
 body :: Free SpaceF Unit -> Free SpaceF Unit
 body = rDOMNode "body" [] (IsDynamic false)
 
+-- | Note that this node does not accept children.
 br :: Free SpaceF Unit
 br = rDOMNode "br" [] (IsDynamic false) empty
 
@@ -155,15 +156,18 @@ html = rDOMNode "html" [] (IsDynamic false)
 i :: Free SpaceF Unit -> Free SpaceF Unit
 i = rDOMNode "i" [] (IsDynamic false)
 
+-- | Note that this node does not accept children.
 iframe :: Free SpaceF Unit
 iframe = rDOMNode "iframe" [] (IsDynamic false) empty
 
 iframe' :: Free SpaceF Unit -> Free SpaceF Unit
 iframe' = rDOMNode "iframe" [] (IsDynamic false)
 
+-- | Note that this node does not accept children.
 img :: Free SpaceF Unit
 img = rDOMNode "img" [] (IsDynamic false) empty
 
+-- | Note that this node does not accept children.
 input :: Free SpaceF Unit
 input = rDOMNode "input" [] (IsDynamic false) empty
 
@@ -185,6 +189,7 @@ legend = rDOMNode "legend" [] (IsDynamic false)
 li :: Free SpaceF Unit -> Free SpaceF Unit
 li = rDOMNode "li" [] (IsDynamic false)
 
+-- | Note that this node does not accept children.
 link :: Free SpaceF Unit
 link = rDOMNode "link" [] (IsDynamic false) empty
 
@@ -305,6 +310,7 @@ tbody = rDOMNode "tbody" [] (IsDynamic false)
 td :: Free SpaceF Unit -> Free SpaceF Unit
 td = rDOMNode "td" [] (IsDynamic false)
 
+-- | Note that this node does not accept children.
 textarea :: Free SpaceF Unit
 textarea = rDOMNode "textarea" [] (IsDynamic false) empty
 
@@ -326,6 +332,7 @@ title = rDOMNode "title" [] (IsDynamic false)
 tr :: Free SpaceF Unit -> Free SpaceF Unit
 tr = rDOMNode "tr" [] (IsDynamic false)
 
+-- | Note that this node does not accept children.
 track :: Free SpaceF Unit
 track = rDOMNode "track" [] (IsDynamic false) empty
 
@@ -341,5 +348,6 @@ var = rDOMNode "var" [] (IsDynamic false)
 video :: Free SpaceF Unit -> Free SpaceF Unit
 video = rDOMNode "video" [] (IsDynamic false)
 
+-- | Note that this node does not accept children.
 wbr :: Free SpaceF Unit
 wbr = rDOMNode "body" [] (IsDynamic false) empty
