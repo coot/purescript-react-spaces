@@ -145,3 +145,14 @@ Checkout [examples](https://github.com/coot/purescript-react-spaces/blob/master/
 
 For another example you can check out
 [purescript-isomorphic-react-example](https://github.com/coot/purescript-isomorphic-react-example/blob/master/src/Jam/App.purs#L249).
+
+# Conditional rendering using `with`
+
+Another common patter is to conditionally include part of a ui.  You can use `when` for that:
+```
+  renderIn React.DOM.div' $ do
+    h1 $ title "Hello"
+    when condition do
+      -- note that `React.Space.DOM.input` elements do not accept children (unlike `React.DOM.input`)
+      input ! P.onChange (handleChange this)
+```
