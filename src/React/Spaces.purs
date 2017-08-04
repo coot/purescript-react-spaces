@@ -95,6 +95,10 @@ empty = liftF (SpaceF (mkExists (Empty unit)))
 element :: ReactElement -> SpaceM
 element el = liftF $ SpaceF $ mkExists $ ReactElementNode el unit
 
+-- | Element with children
+element' :: (Array ReactElement -> ReactElement) -> SpaceM -> SpaceM
+element' fn chldrn = element $ fn (render chldrn)
+
 -- | Add multiple elements at once
 -- |
 -- | Children can be implement using `element` (as `sequence_ <<< map element`)
