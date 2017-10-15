@@ -1,5 +1,5 @@
 # purescript-react-spaces
-**Combinator library for writting React vDOM**
+**Combinator library for writing React vDOM**
 
 [![Maintainer: coot](https://img.shields.io/badge/maintainer-coot-lightgrey.svg)](http://github.com/coot)
 [![Documentation](https://pursuit.purescript.org/packages/purescript-react-spaces/badge)](https://pursuit.purescript.org/packages/purescript-react-spaces)
