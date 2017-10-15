@@ -148,7 +148,7 @@ For another example you can check out
 
 # Conditional rendering using `with`
 
-Another common patter is to conditionally include part of a ui.  You can use `when` for that:
+Another common pattern is to conditionally include part of a ui.  You can use `when` for that:
 ```
   renderIn React.DOM.div' $ do
     h1 $ title "Hello"
