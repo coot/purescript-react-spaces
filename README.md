@@ -28,7 +28,7 @@ s = spec unit (map (renderIn React.DOM.div') <<< render)
   where
     render :: ReactThis Unit Unit -> SpaceM
     render this = pure $
-      div ! className "greeting" $ do
+      div !. "greeting" $ do
 	text "Hello World!
 
 ```
@@ -55,7 +55,7 @@ greeting
 greeting = createClassStateless'
   \(Greeting { name, onChange }) chldrn
   -> renderIn React.DOM.div' do
-    div ! className "greeting" $ do
+    div !. "greeting" $ do
       label do
 	div do
 	  h1 do
@@ -127,9 +127,9 @@ show only if you have a `Just` value.  Since `SpaceM` is an instance of
 ```
 nCls :: ReactClass { name :: String }
 nCls = createClassStateless \{ name } -> renderIn React.DOM.div' do
-  h1 ! className "title" $ do
+  h1 !. "title" $ do
     text "Hello "
-    span ! className "name" $ text name
+    span !. "name" $ text name
 
 mSpec :: forall eff. ReactSpec { mName :: Maybe String } Unit eff
 mSpec = spec unit renderFn
@@ -138,7 +138,7 @@ mSpec = spec unit renderFn
       { mName } <- getProps this
       let mNameNode = (nCls ^ _) <$> mName
       pure $ renderIn React.DOM.div' $ do
-	h1 ! className "app" $ do
+	h1 !. "app" $ do
 	  text "Hello App"
 	sequence_ mNameNode
 ```
