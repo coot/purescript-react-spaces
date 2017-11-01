@@ -2,10 +2,10 @@ module React.Spaces
   ( Space(..)
   , SpaceF(SpaceF)
   , SpaceM
-
   , cls
   , (^)
   , cls'
+
   , (^^)
   , dCls'
   , (^+)
