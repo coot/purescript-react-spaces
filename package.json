@@ -1,40 +1,40 @@
 {
   "name": "purescript-react-spaces",
   "version": "0.1.0",
-  "description": "React free monad markup",
-  "main": "src/React/Space.purs",
+  "description": "**Combinator library for writing React vDOM**",
+  "main": "index.js",
   "directories": {
+    "example": "examples",
     "test": "test"
   },
   "dependencies": {
+    "benchmark": "^2.1.4",
+    "http-server": "^0.10.0",
+    "microtime": "^2.1.6",
+    "pulp": "^11.0.2",
     "react": "^15.6.1",
     "react-create-class": "^1.0.0",
     "react-dom": "^15.6.1"
   },
-  "devDependencies": {
-    "http-server": "^0.10.0",
-    "pulp": "^11.0.0"
-  },
+  "devDependencies": {},
   "scripts": {
-    "examples:build": "pulp browserify -I examples/src -m Examples.Main -t examples/index.js",
-    "examples:dev": "pulp --watch browserify -I examples/src -m Examples.Main -t examples/index.js",
-    "examples:serve": "http-server examples"
+    "build": "pulp build",
+    "test": "pulp test"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/coot/purescript-react-space.git"
+    "url": "git+https://github.com/coot/purescript-react-spaces.git"
   },
   "keywords": [
-    "react",
     "purescript",
-    "markup",
-    "jsx",
-    "free"
+    "free-monad",
+    "dsl",
+    "react"
   ],
   "author": "Marcin Szamotulski",
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/coot/purescript-react-space/issues"
+    "url": "https://github.com/coot/purescript-react-spaces/issues"
   },
-  "homepage": "https://github.com/coot/purescript-react-space#readme"
+  "homepage": "https://github.com/coot/purescript-react-spaces#readme"
 }
