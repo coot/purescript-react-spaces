@@ -39,7 +39,7 @@ import Prelude (class Functor, Unit, map, pure, unit, ($), (<<<), (<>))
 import React (ReactClass, ReactElement, createElement, createElementDynamic)
 import React.DOM (IsDynamic(..), mkDOM)
 import React.DOM (text) as R
-import React.DOM.Props (Props)
+import React.DOM.Props (Props, className, _id)
 
 data Space a props
   = DomNode String (Array Props) IsDynamic SpaceM a
@@ -128,11 +128,13 @@ infixl 4 with as !
 withClass :: forall a. Propertable a => a -> String -> a
 withClass elem name = elem ! className name
 
+-- | Combinator which adds `className` prop.
 infixl 4 withClass as !.
 
 withId :: forall a. Propertable a => a -> String -> a
 withId elem name = elem ! _id name
 
+-- | Combinator which adds `_id` prop.
 infixl 4 withId as !#
 
 withAttribute :: forall a. SpaceF a -> Props -> SpaceF a
