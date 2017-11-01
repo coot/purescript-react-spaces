@@ -18,6 +18,11 @@ module React.Spaces
 
   , class Propertable, with
   , (!)
+  
+  , withClass
+  , (!.)
+  , withId
+  , (!#)
 
   , render
   , renderIn
@@ -119,6 +124,16 @@ class Propertable a where
 -- |  div ! className "container" ! onClick clickHandler $ do text "Hello"
 -- | ```
 infixl 4 with as !
+
+withClass :: forall a. Propertable a => a -> String -> a
+withClass elem name = elem ! className name
+
+infixl 4 withClass as !.
+
+withId :: forall a. Propertable a => a -> String -> a
+withId elem name = elem ! _id name
+
+infixl 4 withId as !#
 
 withAttribute :: forall a. SpaceF a -> Props -> SpaceF a
 withAttribute (SpaceF sp) p = SpaceF $ runExists (mkExists <<< withAttr p) sp
