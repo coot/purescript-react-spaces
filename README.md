@@ -3,6 +3,7 @@
 
 [![Maintainer: coot](https://img.shields.io/badge/maintainer-coot-lightgrey.svg)](http://github.com/coot)
 [![Documentation](https://pursuit.purescript.org/packages/purescript-react-spaces/badge)](https://pursuit.purescript.org/packages/purescript-react-spaces)
+[![Build Status](https://travis-ci.org/coot/purescript-react-spaces.svg?branch=master)](https://travis-ci.org/coot/purescript-react-spaces)
 
 It it is heavily inspired by [purescript-smolder](https://github.com/bodil/purescript-smolder).
 
